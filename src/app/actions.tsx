@@ -12,3 +12,12 @@ export async function createTodoAction(formData: FormData) {
     },
   });
 }
+
+export async function deleteTodoAction(formData: FormData) {
+  const id = formData.get('todoId');
+  await prisma.todo.delete({
+    where: {
+      id: id,
+    },
+  });
+}
