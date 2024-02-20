@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { prisma } from '../../prisma/client';
 
 export async function createTodoAction(formData: FormData) {
@@ -11,8 +12,14 @@ export async function createTodoAction(formData: FormData) {
       complete: complete,
     },
   });
+  revalidatePath('/');
 }
 
-export async function deleteTodoAction(formData: FormData) {
-  const id = formData.get('todoId');
+export async function deleteTodoAction(id: number) {
+  await prisma.todo.delete({
+    where: {
+      id: id,
+    },
+  });
+  revalidatePath('/');
 }
